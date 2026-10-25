@@ -8,6 +8,7 @@ const Register = () => {
     name: '',
     email: '',
     password: '',
+    role: 'student',
     skills: '',
     interests: '',
     experienceLevel: 'Beginner',
@@ -48,6 +49,7 @@ const Register = () => {
         name: formData.name,
         email: formData.email,
         password: formData.password,
+        role: formData.role,
         skills: formData.skills,
         interests: formData.interests,
         experienceLevel: formData.experienceLevel,
@@ -64,9 +66,9 @@ const Register = () => {
     <div className="max-w-lg mx-auto px-4 py-12">
       <div className="bg-white border border-gray-200 rounded-lg p-6 sm:p-8 shadow-xs">
         <div className="mb-6 text-center">
-          <h1 className="text-2xl font-bold text-gray-900">Student Registration</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Create an Account</h1>
           <p className="text-sm text-gray-600 mt-1">
-            Create an academic profile to collaborate on college projects
+            Join ProjectForge as a Student, Faculty, or Administrator
           </p>
         </div>
 
@@ -121,6 +123,24 @@ const Register = () => {
               className="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="role">
+              Account Role *
+            </label>
+            <select
+              id="role"
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded text-sm bg-white focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="student">Student — Collaborate on projects & find teammates</option>
+              <option value="faculty">Faculty — Mentor project teams & review work</option>
+              <option value="admin">Admin — Platform administration & user management</option>
+            </select>
+          </div>
+
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="skills">

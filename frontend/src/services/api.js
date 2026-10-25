@@ -122,3 +122,28 @@ export const projectAPI = {
       body: JSON.stringify({ status }),
     }),
 };
+
+// Admin APIs (Restricted to Admin role)
+export const adminAPI = {
+  getStats: () =>
+    request('/admin/stats', {
+      method: 'GET',
+    }),
+
+  getUsers: () =>
+    request('/admin/users', {
+      method: 'GET',
+    }),
+
+  updateUserRole: (id, role) =>
+    request(`/admin/users/${id}/role`, {
+      method: 'PATCH',
+      body: JSON.stringify({ role }),
+    }),
+
+  deleteUser: (id) =>
+    request(`/admin/users/${id}`, {
+      method: 'DELETE',
+    }),
+};
+

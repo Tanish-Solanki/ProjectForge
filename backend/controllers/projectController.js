@@ -151,11 +151,13 @@ exports.updateProject = async (req, res, next) => {
       return res.status(404).json({ success: false, message: 'Project not found.' });
     }
 
-    // Ownership check
-    if (project.owner.toString() !== req.user._id.toString()) {
+    // Ownership check (Owner or Admin)
+    const isOwner = project.owner.toString() === req.user._id.toString();
+    const isAdmin = req.user.role === 'admin';
+    if (!isOwner && !isAdmin) {
       return res.status(403).json({
         success: false,
-        message: 'Unauthorized. Only the project owner can edit this project.'
+        message: 'Unauthorized. Only the project owner or an administrator can edit this project.'
       });
     }
 
@@ -217,11 +219,13 @@ exports.deleteProject = async (req, res, next) => {
       return res.status(404).json({ success: false, message: 'Project not found.' });
     }
 
-    // Ownership check
-    if (project.owner.toString() !== req.user._id.toString()) {
+    // Ownership check (Owner or Admin)
+    const isOwner = project.owner.toString() === req.user._id.toString();
+    const isAdmin = req.user.role === 'admin';
+    if (!isOwner && !isAdmin) {
       return res.status(403).json({
         success: false,
-        message: 'Unauthorized. Only the project owner can delete this project.'
+        message: 'Unauthorized. Only the project owner or an administrator can delete this project.'
       });
     }
 
@@ -380,11 +384,13 @@ exports.getProjectRequests = async (req, res, next) => {
       return res.status(404).json({ success: false, message: 'Project not found.' });
     }
 
-    // Authorization check: Only project owner can view requests
-    if (project.owner.toString() !== req.user._id.toString()) {
+    // Authorization check: Only project owner or admin can view requests
+    const isOwner = project.owner.toString() === req.user._id.toString();
+    const isAdmin = req.user.role === 'admin';
+    if (!isOwner && !isAdmin) {
       return res.status(403).json({
         success: false,
-        message: 'Unauthorized. Only the project owner can view join requests.'
+        message: 'Unauthorized. Only the project owner or an administrator can view join requests.'
       });
     }
 
@@ -426,11 +432,13 @@ exports.handleJoinRequest = async (req, res, next) => {
       return res.status(404).json({ success: false, message: 'Project not found.' });
     }
 
-    // Authorization check: Only project owner can accept or reject
-    if (project.owner.toString() !== req.user._id.toString()) {
+    // Authorization check: Only project owner or admin can accept or reject
+    const isOwner = project.owner.toString() === req.user._id.toString();
+    const isAdmin = req.user.role === 'admin';
+    if (!isOwner && !isAdmin) {
       return res.status(403).json({
         success: false,
-        message: 'Unauthorized. Only the project owner can accept or reject join requests.'
+        message: 'Unauthorized. Only the project owner or an administrator can accept or reject join requests.'
       });
     }
 

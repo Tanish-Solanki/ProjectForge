@@ -3,7 +3,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, logout, isAdmin } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -23,6 +23,29 @@ const Navbar = () => {
       ? 'bg-blue-50 text-blue-700 font-semibold'
       : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
     }`;
+
+  const renderRoleBadge = (role) => {
+    const roleKey = role?.toLowerCase() || 'student';
+    if (roleKey === 'admin') {
+      return (
+        <span className="px-2 py-0.5 text-[11px] font-semibold bg-purple-100 text-purple-700 border border-purple-200 rounded">
+          Admin
+        </span>
+      );
+    }
+    if (roleKey === 'faculty') {
+      return (
+        <span className="px-2 py-0.5 text-[11px] font-semibold bg-emerald-100 text-emerald-700 border border-emerald-200 rounded">
+          Faculty
+        </span>
+      );
+    }
+    return (
+      <span className="px-2 py-0.5 text-[11px] font-semibold bg-blue-100 text-blue-700 border border-blue-200 rounded">
+        Student
+      </span>
+    );
+  };
 
   return (
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-40">
@@ -54,6 +77,19 @@ const Navbar = () => {
                 <NavLink to="/profile" className={navLinkClass}>
                   Profile
                 </NavLink>
+                {isAdmin && (
+                  <NavLink
+                    to="/admin"
+                    className={({ isActive }) =>
+                      `px-3 py-2 text-sm font-semibold transition-colors rounded ${isActive
+                        ? 'bg-purple-100 text-purple-800'
+                        : 'text-purple-700 hover:bg-purple-50'
+                      }`
+                    }
+                  >
+                    Admin Panel
+                  </NavLink>
+                )}
               </div>
             )}
           </div>
@@ -63,7 +99,10 @@ const Navbar = () => {
             {isAuthenticated ? (
               <div className="flex items-center space-x-3">
                 <div className="text-right">
-                  <div className="text-sm font-medium text-gray-900">{user?.name}</div>
+                  <div className="flex items-center justify-end gap-1.5">
+                    <span className="text-sm font-medium text-gray-900">{user?.name}</span>
+                    {renderRoleBadge(user?.role)}
+                  </div>
                   <div className="text-xs text-gray-500">{user?.experienceLevel}</div>
                 </div>
                 <button
@@ -117,8 +156,11 @@ const Navbar = () => {
           {isAuthenticated ? (
             <>
               <div className="px-3 py-2 border-b border-gray-100 mb-2">
-                <div className="text-sm font-medium text-gray-900">{user?.name}</div>
-                <div className="text-xs text-gray-500">{user?.email} ({user?.experienceLevel})</div>
+                <div className="flex items-center justify-between">
+                  <div className="text-sm font-medium text-gray-900">{user?.name}</div>
+                  {renderRoleBadge(user?.role)}
+                </div>
+                <div className="text-xs text-gray-500 mt-0.5">{user?.email} ({user?.experienceLevel})</div>
               </div>
               <NavLink to="/dashboard" onClick={() => setMobileMenuOpen(false)} className={mobileNavLinkClass}>
                 Dashboard
@@ -135,6 +177,15 @@ const Navbar = () => {
               <NavLink to="/profile" onClick={() => setMobileMenuOpen(false)} className={mobileNavLinkClass}>
                 Profile
               </NavLink>
+              {isAdmin && (
+                <NavLink
+                  to="/admin"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-3 py-2 text-base font-semibold text-purple-700 bg-purple-50 rounded-md"
+                >
+                  Admin Panel
+                </NavLink>
+              )}
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
@@ -165,3 +216,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+

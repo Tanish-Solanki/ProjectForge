@@ -113,7 +113,36 @@ async function testBackend() {
     const isFull = project.members.length >= project.maxTeamSize;
     console.log('Team at maximum capacity:', isFull);
 
-    console.log('\n--- ALL BACKEND TEST ASSERTIONS PASSED! ---');
+    // 8. Verify RBAC 3-Role Model
+    const faculty = await User.create({
+      name: 'Prof. Miller',
+      email: 'miller@college.edu',
+      password: 'password123',
+      role: 'faculty',
+      skills: ['Mentorship', 'Cloud Architecture'],
+      interests: ['Distributed Systems'],
+      experienceLevel: 'Advanced'
+    });
+
+    const admin = await User.create({
+      name: 'System Admin',
+      email: 'admin@college.edu',
+      password: 'password123',
+      role: 'admin',
+      skills: ['DevOps', 'Security'],
+      interests: ['Infrastructure'],
+      experienceLevel: 'Advanced'
+    });
+
+    console.log('RBAC Check - Alice role (default):', alice.role);
+    console.log('RBAC Check - Prof. Miller role:', faculty.role);
+    console.log('RBAC Check - System Admin role:', admin.role);
+
+    if (alice.role !== 'student' || faculty.role !== 'faculty' || admin.role !== 'admin') {
+      throw new Error('RBAC role verification failed!');
+    }
+
+    console.log('\n--- ALL BACKEND TEST ASSERTIONS & RBAC VERIFICATIONS PASSED! ---');
     await mongoose.disconnect();
     process.exit(0);
   } catch (err) {

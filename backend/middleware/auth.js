@@ -79,4 +79,26 @@ const optionalProtect = async (req, res, next) => {
   next();
 };
 
-module.exports = { protect, optionalProtect };
+// Authorize middleware for Role-Based Access Control (RBAC)
+const authorize = (...roles) => {
+  return (req, res, next) => {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: 'Authentication required. Please log in.'
+      });
+    }
+
+    const userRole = req.user.role || 'student';
+    if (!roles.includes(userRole)) {
+      return res.status(403).json({
+        success: false,
+        message: `Forbidden: User role '${userRole}' is not authorized to access this resource.`
+      });
+    }
+
+    next();
+  };
+};
+
+module.exports = { protect, optionalProtect, authorize };

@@ -70,9 +70,14 @@ const Profile = () => {
     <div className="max-w-2xl mx-auto px-4 py-8">
       <div className="bg-white border border-gray-200 rounded-lg p-6 sm:p-8 shadow-xs">
         <div className="mb-6 border-b border-gray-200 pb-4">
-          <h1 className="text-2xl font-bold text-gray-900">Student Profile</h1>
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-bold text-gray-900">User Profile</h1>
+            <span className="px-3 py-1 text-xs font-semibold rounded capitalize bg-blue-50 text-blue-700 border border-blue-200">
+              Role: {user?.role || 'student'}
+            </span>
+          </div>
           <p className="text-sm text-gray-600 mt-1">
-            Manage your technical information and experience level.
+            Manage your personal profile, technical skills, and experience level.
           </p>
         </div>
 
@@ -80,22 +85,30 @@ const Profile = () => {
         <Alert type="error" message={errorMsg} onClose={() => setErrorMsg('')} />
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Email (Read Only) */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="email">
-              College Email (Read-only)
-            </label>
-            <input
-              id="email"
-              type="email"
-              disabled
-              value={formData.email}
-              className="w-full px-3 py-2 border border-gray-200 rounded text-sm bg-gray-100 text-gray-500 cursor-not-allowed font-mono"
-            />
-            <p className="text-xs text-gray-400 mt-1">
-              Email address cannot be changed for security and academic tracking.
-            </p>
+          {/* Email & Role Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="email">
+                College Email (Read-only)
+              </label>
+              <input
+                id="email"
+                type="email"
+                disabled
+                value={formData.email}
+                className="w-full px-3 py-2 border border-gray-200 rounded text-sm bg-gray-100 text-gray-500 cursor-not-allowed font-mono"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Account Role (Fixed)
+              </label>
+              <div className="w-full px-3 py-2 border border-gray-200 rounded text-sm bg-gray-100 text-gray-700 font-medium capitalize">
+                {user?.role || 'student'}
+              </div>
+            </div>
           </div>
+
 
           {/* Full Name */}
           <div>

@@ -13,6 +13,7 @@ import Projects from './pages/Projects';
 import ProjectDetails from './pages/ProjectDetails';
 import FindTeammates from './pages/FindTeammates';
 import MyProjects from './pages/MyProjects';
+import AdminPanel from './pages/AdminPanel';
 
 function NotFound() {
   return (
@@ -43,7 +44,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
 
-              {/* Protected Routes */}
+              {/* Protected User Routes (Students, Faculty, Admins) */}
               <Route element={<ProtectedRoute />}>
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/profile" element={<Profile />} />
@@ -51,6 +52,11 @@ function App() {
                 <Route path="/projects/:id" element={<ProjectDetails />} />
                 <Route path="/teammates" element={<FindTeammates />} />
                 <Route path="/my-projects" element={<MyProjects />} />
+              </Route>
+
+              {/* Admin Protected Route */}
+              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+                <Route path="/admin" element={<AdminPanel />} />
               </Route>
 
               {/* Catch-all 404 */}

@@ -26,6 +26,7 @@ const sendTokenResponse = (user, statusCode, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
+        role: user.role || 'student',
         skills: user.skills || [],
         interests: user.interests || [],
         experienceLevel: user.experienceLevel || 'Beginner',
@@ -51,7 +52,7 @@ const parseArray = (input) => {
 // @access  Public
 exports.register = async (req, res, next) => {
   try {
-    const { name, email, password, skills, interests, experienceLevel } = req.body;
+    const { name, email, password, skills, interests, experienceLevel, role } = req.body;
 
     // Validate required fields
     if (!name || !email || !password) {
@@ -85,6 +86,12 @@ exports.register = async (req, res, next) => {
     const validLevels = ['Beginner', 'Intermediate', 'Advanced'];
     const level = validLevels.includes(experienceLevel) ? experienceLevel : 'Beginner';
 
+    // Validate role (3-role model: student, faculty, admin)
+    const validRoles = ['student', 'faculty', 'admin'];
+    const selectedRole = role && validRoles.includes(role.toLowerCase().trim())
+      ? role.toLowerCase().trim()
+      : 'student';
+
     // Create user
     const user = await User.create({
       name: name.trim(),
@@ -92,7 +99,8 @@ exports.register = async (req, res, next) => {
       password,
       skills: parsedSkills,
       interests: parsedInterests,
-      experienceLevel: level
+      experienceLevel: level,
+      role: selectedRole
     });
 
     sendTokenResponse(user, 201, res);

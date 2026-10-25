@@ -7,7 +7,7 @@ import Alert from '../components/Alert';
 const ProjectDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, isAdmin } = useAuth();
 
   const [project, setProject] = useState(null);
   const [relation, setRelation] = useState(null);
@@ -44,8 +44,8 @@ const ProjectDetails = () => {
           status: res.project.status,
         });
 
-        // If the user is the owner, fetch pending join requests
-        if (res.userRelation?.isOwner) {
+        // If the user is the owner or an admin, fetch join requests
+        if (res.userRelation?.isOwner || isAdmin) {
           fetchJoinRequests();
         }
       }
@@ -322,8 +322,8 @@ const ProjectDetails = () => {
                 <h1 className="text-2xl font-bold text-gray-900">{project.title}</h1>
               </div>
 
-              {/* Owner Action Buttons */}
-              {isOwner && (
+              {/* Owner or Admin Action Buttons */}
+              {(isOwner || isAdmin) && (
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setIsEditing(true)}
@@ -336,7 +336,7 @@ const ProjectDetails = () => {
                     disabled={actionLoading}
                     className="px-3 py-1.5 bg-red-50 border border-red-200 text-red-700 hover:bg-red-100 text-xs font-medium rounded cursor-pointer"
                   >
-                    Delete Project
+                    {isAdmin && !isOwner ? 'Delete (Admin)' : 'Delete Project'}
                   </button>
                 </div>
               )}
@@ -465,8 +465,8 @@ const ProjectDetails = () => {
         )}
       </div>
 
-      {/* Owner-Only: Pending Join Requests Management Section */}
-      {isOwner && (
+      {/* Owner or Admin: Join Requests Management Section */}
+      {(isOwner || isAdmin) && (
         <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-xs">
           <div className="flex justify-between items-center mb-4">
             <div>

@@ -58,8 +58,14 @@ export const AuthProvider = ({ children }) => {
     setUser(updatedUser);
   };
 
+  const userRole = user?.role || 'student';
+
   const value = {
     user,
+    role: userRole,
+    isAdmin: userRole === 'admin',
+    isFaculty: userRole === 'faculty',
+    isStudent: userRole === 'student',
     loading,
     isAuthenticated: Boolean(user),
     login,
