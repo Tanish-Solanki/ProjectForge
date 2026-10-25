@@ -1,7 +1,7 @@
 # ProjectForge
 
 > 🚀 **Live Deployment**:
-> - **Frontend**: [https://project-forge-eosin.vercel.app](https://project-forge-eosin.vercel.app)
+> - **Frontend**: [https://project-forge-fsd.vercel.app](https://project-forge-fsd.vercel.app)
 > - **Backend API**: [https://projectforge-backend-2zem.onrender.com](https://projectforge-backend-2zem.onrender.com)
 
 **ProjectForge** is a full-stack academic project collaboration and teammate-matching platform designed for college students. It allows students to publish course project proposals, discover compatible teammates using a deterministic matching algorithm, request to join teams, and manage project join requests.
