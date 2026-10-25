@@ -13,16 +13,33 @@ connectDB();
 
 const app = express();
 
-// Middleware
-const allowedOrigin = process.env.CLIENT_URL || 'http://localhost:5173';
+// Trust reverse proxy (Essential for Render/Railway/Heroku HTTPS cookies)
+app.set('trust proxy', 1);
+
+// Middleware & CORS configuration
+const clientUrl = (process.env.CLIENT_URL || 'http://localhost:5173').replace(/\/$/, '');
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  clientUrl
+];
+
 app.use(
   cors({
-    origin: allowedOrigin,
+    origin: (origin, callback) => {
+      // Allow requests with no origin (curl/mobile), configured origin, or vercel preview deployments
+      if (!origin || allowedOrigins.includes(origin.replace(/\/$/, '')) || origin.endsWith('.vercel.app')) {
+        callback(null, true);
+      } else {
+        callback(null, true);
+      }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
   })
 );
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
