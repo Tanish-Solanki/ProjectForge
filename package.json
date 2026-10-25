@@ -1,0 +1,10 @@
+{
+  "name": "projectforge-root",
+  "version": "1.0.0",
+  "description": "ProjectForge College Innovative Assignment Workspace",
+  "scripts": {
+    "install:all": "npm --prefix backend install && npm --prefix frontend install",
+    "start:backend": "npm --prefix backend start",
+    "start:frontend": "npm --prefix frontend run dev"
+  }
+}
